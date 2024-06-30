@@ -1,4 +1,4 @@
-export class LLMWorkerUpdateResponse {
+export class SLMWorkerUpdateResponse {
     public constructor(
         public type: "update",
         public content: string,
@@ -17,7 +17,7 @@ export class FileProgressIndicator {
     }
 }
 
-export class LLMWorkerDownloadStatusUpdateResponse {
+export class SLMWorkerDownloadStatusUpdateResponse {
     public constructor(
         public type: "download_update",
         public progressIndicator: FileProgressIndicator
@@ -25,7 +25,7 @@ export class LLMWorkerDownloadStatusUpdateResponse {
     }
 }
 
-export class LLMWorkerStreamingMessageResponse {
+export class SLMWorkerStreamingMessageResponse {
     public constructor(
         public type: "streaming_message",
         public content: string,
@@ -35,7 +35,7 @@ export class LLMWorkerStreamingMessageResponse {
     }
 }
 
-export type LLMWorkerResponse =
-    LLMWorkerUpdateResponse
-    | LLMWorkerStreamingMessageResponse
-    | LLMWorkerDownloadStatusUpdateResponse
+export type SLMWorkerResponse =
+    SLMWorkerUpdateResponse
+    | SLMWorkerStreamingMessageResponse
+    | SLMWorkerDownloadStatusUpdateResponse

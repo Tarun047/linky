@@ -13,8 +13,8 @@ import {MessageInput} from "./MessageInput.tsx";
 import {useEffect, useRef, useState} from "react";
 import {Text} from '@fluentui/react-components'
 import {Message} from "@xenova/transformers";
-import {FileProgressIndicator, LLMWorkerResponse} from "../workers/types/LLMWorkerResponse.ts";
-import {LLMGenerateArgs, LLMInitArgs} from "../workers/types/LLMWorkerArgs.ts";
+import {FileProgressIndicator, SLMWorkerResponse} from "../workers/types/SLMWorkerResponse.ts";
+import {LLMGenerateArgs, LLMInitArgs} from "../workers/types/SLMWorkerArgs.ts";
 import FileProgressBar from "./FileProgressBar.tsx";
 
 const useStyles = makeStyles({
@@ -50,7 +50,7 @@ export function Chat() {
     const {dispatchToast} = useToastController(toasterId)
 
 
-    function onMessage(event: MessageEvent<LLMWorkerResponse>) {
+    function onMessage(event: MessageEvent<SLMWorkerResponse>) {
         const response = event.data;
         if (response.type === 'streaming_message') {
             setMessages(prevMessages => {

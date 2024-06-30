@@ -16,4 +16,4 @@ export class LLMGenerateArgs {
     }
 }
 
-export type LLMWorkerArgs = LLMInitArgs | LLMGenerateArgs;
+export type SLMWorkerArgs = LLMInitArgs | LLMGenerateArgs;

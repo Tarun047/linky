@@ -5,13 +5,13 @@ import {
     AutoModelForCausalLM,
     Message, TextStreamer, round
 } from "@xenova/transformers";
-import {LLMWorkerArgs} from "./types/LLMWorkerArgs";
+import {SLMWorkerArgs} from "./types/SLMWorkerArgs.ts";
 import {
     FileProgressIndicator,
-    LLMWorkerDownloadStatusUpdateResponse,
-    LLMWorkerStreamingMessageResponse,
-    LLMWorkerUpdateResponse
-} from "./types/LLMWorkerResponse.ts";
+    SLMWorkerDownloadStatusUpdateResponse,
+    SLMWorkerStreamingMessageResponse,
+    SLMWorkerUpdateResponse
+} from "./types/SLMWorkerResponse.ts";
 import {Tensor} from "@xenova/transformers/types/utils/tensor";
 
 class CallbackTextStreamer extends TextStreamer {
@@ -29,10 +29,10 @@ class CallbackTextStreamer extends TextStreamer {
     }
 }
 
-class LLMGenerator {
+class SLMWorker {
     private tokenizer: PreTrainedTokenizer;
     private model: PreTrainedModel;
-    private static instance: LLMGenerator;
+    private static instance: SLMWorker;
 
     private constructor(model: PreTrainedModel, tokenizer: PreTrainedTokenizer) {
         this.model = model;
@@ -55,7 +55,7 @@ class LLMGenerator {
         const streamer = new CallbackTextStreamer(this.tokenizer, (output) => {
             numTokens++;
             const tps = round(numTokens / (performance.now() - start) * 1000, 2);
-            self.postMessage(new LLMWorkerStreamingMessageResponse("streaming_message", output, tps))
+            self.postMessage(new SLMWorkerStreamingMessageResponse("streaming_message", output, tps))
         });
 
         const outputs = await this.model.generate({
@@ -65,15 +65,15 @@ class LLMGenerator {
         }) as Tensor;
 
         this.tokenizer.batch_decode(outputs, {skip_special_tokens: false});
-         postMessage(new LLMWorkerUpdateResponse("update", "generation_done"));
+         postMessage(new SLMWorkerUpdateResponse("update", "generation_done"));
     }
 
     public static async getInstance(model_id: string) {
-        if (!LLMGenerator.instance) {
+        if (!SLMWorker.instance) {
             const progress_callback = (progressIndicator: FileProgressIndicator) => {
-                postMessage(new LLMWorkerDownloadStatusUpdateResponse("download_update", progressIndicator));
+                postMessage(new SLMWorkerDownloadStatusUpdateResponse("download_update", progressIndicator));
             }
-            postMessage(new LLMWorkerUpdateResponse("update", "Downloading model ..."));
+            postMessage(new SLMWorkerUpdateResponse("update", "Downloading model ..."));
             const model = await AutoModelForCausalLM.from_pretrained(model_id, {
                 use_external_data_format: true,
                 device: "webgpu",
@@ -81,20 +81,20 @@ class LLMGenerator {
                 progress_callback
             })
             const tokenizer = await AutoTokenizer.from_pretrained(model_id, {legacy: true});
-            LLMGenerator.instance = new LLMGenerator(model, tokenizer);
+            SLMWorker.instance = new SLMWorker(model, tokenizer);
             const inputs = tokenizer('a');
             await model.generate({...inputs, max_new_tokens: 1, progress_callback});
-            postMessage(new LLMWorkerUpdateResponse("update", "ready"));
+            postMessage(new SLMWorkerUpdateResponse("update", "ready"));
         }
-        return LLMGenerator.instance;
+        return SLMWorker.instance;
     }
 }
 
-let generator: LLMGenerator;
-self.addEventListener('message', async (event: MessageEvent<LLMWorkerArgs>) => {
+let generator: SLMWorker;
+self.addEventListener('message', async (event: MessageEvent<SLMWorkerArgs>) => {
     const args = event.data;
     if (args.task == 'init') {
-        generator = await LLMGenerator.getInstance(args.model_id);
+        generator = await SLMWorker.getInstance(args.model_id);
     }
 
     if (args.task == 'generate') {

@@ -1,4 +1,4 @@
-import {FileProgressIndicator} from "../workers/types/LLMWorkerResponse.ts";
+import {FileProgressIndicator} from "../workers/types/SLMWorkerResponse.ts";
 import {Field, makeStyles, ProgressBar} from "@fluentui/react-components";
 
 export type FileProgressBarProps = {
