@@ -1,0 +1,3 @@
+[submodule "transformers.js"]
+	path = transformers.js
+	url = https://github.com/xenova/transformers.js.git
