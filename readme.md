@@ -16,3 +16,4 @@
 2. Then we need to install and build the dependencies of the transformers v3 (pre-release), at some point in future when the stable version of this library is out we don't need  this but for now run `cd transformers.js && npm install && npm run build && cd ..`
 3. Then we need to install and build the dependencies of this project by running `cd linky-ui && npm install`
 4. Now we can launch the dev server by running `npm run dev` and fireup a browser that supports WebGPU like chrome and head to `http://localhost:5173` to experience the SLM.
+5. If you want to experience this straight away, you can head to the deployed site here: https://tarun047.github.io/slm-demo/
