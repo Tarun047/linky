@@ -1,8 +1,8 @@
 # Leveraging SLMs on your browser
 
 1. This repo contains a simple example of how to leverage various web technologies to run a Small Language Model right on your browser.
-2. You can have a read at the medium article here: 
-2. The tech stack includes:
+2. You can have a read at the medium article [here](https://codezen.medium.com/unleashing-the-power-of-self-learning-machines-running-slms-on-your-browser-2ed3f3a3496e?source=friends_link&sk=89b3fe9e2e4bdbdb6ad42be389ae500a)
+3. The tech stack includes:
    1. React because it's the best Frontend library ;)
    2. Typescript, cause I don't like JS.
    3. Web GPU APIs enabling the browser to use GPU power.
