@@ -32,7 +32,7 @@ enum SLMState {
     READY
 }
 
-export function Chat() {
+export function  Chat() {
     const classes = useStyles();
     const [messages, setMessages] = useState<Message[]>([{
         role: "system",
@@ -112,7 +112,7 @@ export function Chat() {
 
     useEffect(() => {
         if (!worker.current) {
-            const llmWorker = new Worker(new URL('@/workers/LLMWorker', import.meta.url), {type: "module"});
+            const llmWorker = new Worker(new URL('@/workers/SLMWorker', import.meta.url), {type: "module"});
             llmWorker.onmessage = onMessage;
             llmWorker.postMessage(new LLMInitArgs('init', model_id))
             worker.current = llmWorker;
